@@ -22,23 +22,13 @@ public class Produto implements Serializable,Mercadoria{
 	
 	}
 	
-	public Produto(Mercadoria mercadoria) {
-		this.id = ((Produto)mercadoria).getId();
-		this.descricao = ((Produto)mercadoria).getDescricao();
-		this.data_cadastro = ((Produto)mercadoria).getData_cadastro();
-		this.valor_venda = ((Produto)mercadoria).getValor_venda();
-		this.qtd_estoque = ((Produto)mercadoria).getQtd_estoque();
-		this.valor_nf = ((Produto)mercadoria).getValor_nf();
-	}
-	
-	
 	public Produto(Long id_mercadoria,String descricao,Calendar data_cadastro,BigDecimal valor_venda,int qtd_estoque,BigDecimal valor_nf) {
-		this.id = id_mercadoria;
-		this.descricao = descricao;
-		this.data_cadastro = data_cadastro;
-		this.valor_venda = valor_venda;
-		this.qtd_estoque = qtd_estoque;
-		this.valor_nf = valor_nf;
+		setId(id_mercadoria);
+		setDescricao(descricao);
+		setData_cadastro(data_cadastro);
+		setValor_venda(valor_venda);
+		setQtd_estoque(qtd_estoque);
+		setValor_nf(valor_nf);
 	}
 	
 	public long getId() {
