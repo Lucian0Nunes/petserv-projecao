@@ -1,0 +1,47 @@
+<project name="PetServ" default="Criando arquivo executavel" basedir=".">
+        <property name="src" location="../src" />
+        <property name="lib" location="../lib" />
+        <property name="build" location="../dist" />
+        <property name="launch4j.dir" location="C:/Program Files/Launch4j" />
+
+        <path id="dist.classpath">
+                <pathelement path="${build}" />
+                <fileset dir="${lib}">
+                <include name="**/*.jar" />
+                </fileset>
+        </path>
+
+        <target name="init">
+                <tstamp />
+                <mkdir dir="${build}" />
+        </target>
+
+        <target name="Compilando arquivos fontes" depends="init" description="Compilando o codigo fonte">
+                <javac srcdir="${src}" destdir="${build}" classpathref="dist.classpath" source="1.6" debug="on" />
+        </target>
+
+        <target name="Criar arquivo .jar" depends="Compilando arquivos fontes" description="Criando o arquivo JAR">
+            <jar destfile="${build}/PetServ.jar" filesetmanifest="mergewithoutmain">
+                <manifest>
+                    <attribute name="Main-Class" value="br.com.petserv.view.PetServFrontend"/>
+                    <attribute name="Class-Path" value="."/>
+                </manifest>
+                <fileset dir="../bin"/>
+                <zipfileset excludes="META-INF/*.SF" src="${lib}/jcalendar-1.4.jar"/>
+                <zipfileset excludes="META-INF/*.SF" src="${lib}/mysql-connector-java-5.1.25-bin.jar"/>
+            </jar>
+        </target>
+
+        <target name="Criando arquivo executavel" depends="Criar arquivo .jar" description="Criando arquivo executavel">
+                <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar
+                    :${launch4j.dir}/lib/xstream.jar" />
+                <launch4j configFile="./petserv.xml" />
+    			<delete dir="${build}/br" />
+        </target>
+
+        <target name="Limpando pastas" description="Limpando arquivos temporarios.">
+                <delete dir="${build}" />
+                <delete file="${ant.project.name}.jar" />
+                <delete file="${ant.project.name}.exe" />
+        </target>
+</project>
