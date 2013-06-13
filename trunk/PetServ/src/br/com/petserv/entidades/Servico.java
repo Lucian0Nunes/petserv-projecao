@@ -23,16 +23,13 @@ public class Servico implements Serializable,Mercadoria{
 	}
 	
 	public Servico(Long id_mercadoria,String descricao,Calendar data_cadastro,BigDecimal valor_venda,Float tempo_medio,boolean disponivel) {
-		this.id = id_mercadoria;
-		this.descricao = descricao;
-		this.data_cadastro = data_cadastro;
-		this.valor_venda = valor_venda;
-		this.tempo_medio = tempo_medio;
-		this.disponivel = disponivel;
-	}
-	
-	
-	
+		setId(id_mercadoria);
+		setDescricao(descricao);
+		setData_cadastro(data_cadastro);
+		setValor_venda(valor_venda);
+		setTempo_medio(tempo_medio);
+		setDisponivel(disponivel);
+	}	
 	
 	public Long getId() {
 		return id;
