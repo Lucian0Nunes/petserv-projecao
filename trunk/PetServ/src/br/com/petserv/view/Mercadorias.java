@@ -1,9 +1,6 @@
 package br.com.petserv.view;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -17,7 +14,6 @@ import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,9 +23,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -42,12 +36,19 @@ import br.com.petserv.interfaces.Mercadoria;
 import br.com.petserv.util.JNumberFormatField;
 
 import com.toedter.calendar.JDateChooser;
+import java.awt.Color;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.LineBorder;
+import java.awt.BorderLayout;
 
-public class PetServFrontend extends JFrame {
 
-	private static final long serialVersionUID = 3073122990601604252L;
-	private JPanel contentPane;
-	private JPanel jpMercadoria;
+
+
+
+public class Mercadorias extends JPanel {
+	
+	private static final long serialVersionUID = 8124150294430304521L;
+
 	private JLabel jlbDescricao;
 	private JTextField  jtfDescricao;
 	private JTextField  jtfEstoqueInicial;
@@ -66,6 +67,7 @@ public class PetServFrontend extends JFrame {
 	private String[] titulosProduto = {"", "Produto", "Data Entrada","Valor Compra", "Valor Venda", "Estoque" };
 	private MercadoriaFacade dao;
 	private JPanel jpTabela;
+	private JPanel jpComponentes;
 	private JTable tabelaMercadoria;
 	private JButton btnLimpar;
 	private JButton btnRemover;
@@ -73,44 +75,27 @@ public class PetServFrontend extends JFrame {
 	private JRadioButton jrbProduto;
 	private JRadioButton jrbServico;
 	private Long id_mercadoria;
+	
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PetServFrontend frame = new PetServFrontend();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	public PetServFrontend() {
+	/**
+	 * Create the panel.
+	 */
+	public Mercadorias() {
+		setBackground(Color.LIGHT_GRAY);
 		dao = new MercadoriaFacade();
 		initComponents();
 		jtbTabela_Mercadorias();
 	}
-
+	
 	private void initComponents() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(PetServFrontend.class.getResource("/resources/icon.png")));
-		setTitle("PetServ");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable( false );
-		setBounds(100, 100, 653, 518);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-
-		jpMercadoria = new JPanel();
-		jpMercadoria.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"),
-				" Cadastro de Mercadorias ",TitledBorder.LEADING, TitledBorder.TOP, null,new Color(0, 0, 0)));
-		jpMercadoria.setBounds(8, 11, 613, 176);
-		contentPane.add(jpMercadoria);
-		jpMercadoria.setLayout(null);
-
+		setLayout(null);
+		
+		jpComponentes = new JPanel();
+		jpComponentes.setBorder(new LineBorder(new Color(0, 0, 0)));
+		jpComponentes.setBounds(10, 11, 611, 191);
+		add(jpComponentes);
+		jpComponentes.setLayout(null);
+		
 		jrbProduto = new JRadioButton("Produto");
 		jrbProduto.setBounds(119, 21, 89, 23);
 		jrbProduto.addActionListener(new ActionListener() {
@@ -122,7 +107,7 @@ public class PetServFrontend extends JFrame {
 				atualizaTabela(new Produto());
 			}
 		});
-		jpMercadoria.add(jrbProduto);
+		jpComponentes.add(jrbProduto);
 
 		jrbServico = new JRadioButton("Servi\u00E7o");
 		jrbServico.setBounds(250, 21, 83, 23);
@@ -136,7 +121,7 @@ public class PetServFrontend extends JFrame {
 				
 			}
 		});
-		jpMercadoria.add(jrbServico);
+		jpComponentes.add(jrbServico);
 
 		btnRadioGroup = new ButtonGroup();
 		btnRadioGroup.add(jrbServico);
@@ -145,17 +130,17 @@ public class PetServFrontend extends JFrame {
 		lblTipoMercadoria = new JLabel("Mercadoria: ");
 		lblTipoMercadoria.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblTipoMercadoria.setBounds(12, 25, 89, 14);
-		jpMercadoria.add(lblTipoMercadoria);
+		jpComponentes.add(lblTipoMercadoria);
 
 		jlbDescricao = new JLabel("Descri\u00E7\u00E3o: ");
 		jlbDescricao.setHorizontalAlignment(SwingConstants.RIGHT);
 		jlbDescricao.setBounds(36, 54, 65, 14);
-		jpMercadoria.add(jlbDescricao);
+		jpComponentes.add(jlbDescricao);
 
 		jtfDescricao = new JTextField ();
 		jtfDescricao.setToolTipText("Descri\u00E7\u00E3o do Produto a ser cadastrado");
 		jtfDescricao.setBounds(109, 51, 319, 20);
-		jpMercadoria.add(jtfDescricao);
+		jpComponentes.add(jtfDescricao);
 		
 		jtfEstoqueInicial = new JTextField();
 		jtfEstoqueInicial.addKeyListener(new KeyListener() {
@@ -176,22 +161,22 @@ public class PetServFrontend extends JFrame {
 		jtfEstoqueInicial.setToolTipText("Valor inicial do estoque do produto em quest\u00E3o");
 		
 		jtfEstoqueInicial.setBounds(109, 81, 112, 20);
-		jpMercadoria.add(jtfEstoqueInicial);
+		jpComponentes.add(jtfEstoqueInicial);
 
 		jlbEstoqueInicial = new JLabel("Estoque Inicial:");
 		jlbEstoqueInicial.setHorizontalAlignment(SwingConstants.RIGHT);
 		jlbEstoqueInicial.setBounds(10, 83, 89, 14);
-		jpMercadoria.add(jlbEstoqueInicial);
+		jpComponentes.add(jlbEstoqueInicial);
 
 		jlbDataCadastro = new JLabel("Data Cadastro:");
 		jlbDataCadastro.setHorizontalAlignment(SwingConstants.RIGHT);
 		jlbDataCadastro.setBounds(10, 112, 89, 14);
-		jpMercadoria.add(jlbDataCadastro);
+		jpComponentes.add(jlbDataCadastro);
 		
 		Date date = new Date();
 		jCalendar = new JDateChooser(date);
 		jCalendar.setBounds(109, 109, 110, 20);
-		jpMercadoria.add(jCalendar);
+		jpComponentes.add(jCalendar);
 
 		btnSalvar = new JButton("Adicionar");
 		btnSalvar.addActionListener(new ActionListener() {
@@ -202,7 +187,7 @@ public class PetServFrontend extends JFrame {
 			}
 		});
 		btnSalvar.setBounds(463, 21, 112, 43);
-		jpMercadoria.add(btnSalvar);
+		jpComponentes.add(btnSalvar);
 
 		btnRemover = new JButton("Remover");
 		btnRemover.setEnabled(false);
@@ -215,17 +200,17 @@ public class PetServFrontend extends JFrame {
 			}
 		});
 		btnRemover.setBounds(463, 70, 112, 43);
-		jpMercadoria.add(btnRemover);
+		jpComponentes.add(btnRemover);
 
 		jlbValorCadastro = new JLabel("Valor de Nota:");
 		jlbValorCadastro.setHorizontalAlignment(SwingConstants.RIGHT);
 		jlbValorCadastro.setBounds(10, 143, 89, 14);
-		jpMercadoria.add(jlbValorCadastro);
+		jpComponentes.add(jlbValorCadastro);
 
 		jblValorVenda = new JLabel("Valor de Venda:");
 		jblValorVenda.setHorizontalAlignment(SwingConstants.RIGHT);
 		jblValorVenda.setBounds(219, 143, 101, 14);
-		jpMercadoria.add(jblValorVenda);
+		jpComponentes.add(jblValorVenda);
 
 		jtfValorNotaFiscal = new JNumberFormatField(new DecimalFormat("R$ 0.00")){    
 			private static final long serialVersionUID = 1L;
@@ -236,7 +221,7 @@ public class PetServFrontend extends JFrame {
 		
 		jtfValorNotaFiscal.setToolTipText("Valor de entrada da mercadoria");
 		jtfValorNotaFiscal.setBounds(109, 140, 100, 20);
-		jpMercadoria.add(jtfValorNotaFiscal);
+		jpComponentes.add(jtfValorNotaFiscal);
 
 
 		jtfValorVenda = new JNumberFormatField(new DecimalFormat("R$ 0.00")){    
@@ -247,18 +232,18 @@ public class PetServFrontend extends JFrame {
         };
 		jtfValorVenda.setToolTipText("Valor de venda da Mercadoria - 30% acima do valo da NF");
 		jtfValorVenda.setBounds(330, 140, 98, 20);
-		jpMercadoria.add(jtfValorVenda);
+		jpComponentes.add(jtfValorVenda);
 
 
 		jlbTempoMedio = new JLabel("Tempo Medio:");
 		jlbTempoMedio.setHorizontalAlignment(SwingConstants.RIGHT);
 		jlbTempoMedio.setBounds(231, 83, 88, 14);
-		jpMercadoria.add(jlbTempoMedio);
+		jpComponentes.add(jlbTempoMedio);
 
 		jtfTempoMedio = new JTextField ();
 		jtfTempoMedio.setToolTipText("Tempo medio gasto na execu\u00E7\u00E3o do servico.");
 		jtfTempoMedio.setBounds(330, 81, 98, 20);
-		jpMercadoria.add(jtfTempoMedio);
+		jpComponentes.add(jtfTempoMedio);
 
 
 		btnLimpar = new JButton("Limpar");
@@ -271,15 +256,18 @@ public class PetServFrontend extends JFrame {
 			}
 		});
 
-		jpMercadoria.add(btnLimpar);
+		jpComponentes.add(btnLimpar);
 
 	}
 	
 	private void jtbTabela_Mercadorias() {
 		jpTabela = new JPanel();
-		jpTabela.setBounds(8, 190, 613, 278);
+		jpTabela.setBorder(new LineBorder(new Color(0, 0, 0)));
+		jpTabela.setBounds(10, 203, 611, 280);
 
 		tabelaMercadoria = new JTable();
+		tabelaMercadoria.setBorder(null);
+		tabelaMercadoria.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		String[] colunas = new String[]{};
 		String[][] dados = new String[][]{{},{}};
 		DefaultTableModel model = new DefaultTableModel(dados , colunas );
@@ -300,12 +288,14 @@ public class PetServFrontend extends JFrame {
 				}
 			} 
 		});
+		jpTabela.setLayout(new BorderLayout(0, 0));
 			
 		JScrollPane scroll = new JScrollPane();
-		scroll.setPreferredSize(new Dimension(610, 270));
+		scroll.setViewportBorder(null);
+		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.setViewportView(tabelaMercadoria);
 		jpTabela.add(scroll);
-		contentPane.add(jpTabela);
+		add(jpTabela);
 	}
 
 	protected Object[] carregarMercadoria(int index) {
@@ -539,6 +529,5 @@ public class PetServFrontend extends JFrame {
 		limpaCampos();
 		atualizaTabela(tipo);
 		btnRemover.setEnabled(false);
-	}
-
+	}	
 }
