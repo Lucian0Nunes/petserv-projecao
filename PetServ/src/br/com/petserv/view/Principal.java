@@ -1,16 +1,13 @@
 package br.com.petserv.view;
 
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-import java.awt.Toolkit;
 
 public class Principal extends JFrame {
 
