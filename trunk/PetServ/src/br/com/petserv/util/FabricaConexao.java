@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class FabricaConexao {
         String driverClassName = "com.mysql.jdbc.Driver";
-        String connectionUrl = "jdbc:mysql://localhost:3306/PetServ";
+        String connectionUrl = "jdbc:mysql://localhost:3306/PetServ7";
         String usuario = "root";
-        String password = "mysql";
+        String password = "root";
 
         private static FabricaConexao connectionFactory = null;
 

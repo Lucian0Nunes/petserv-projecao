@@ -1,6 +1,7 @@
 package br.com.petserv.view;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -22,8 +23,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -36,10 +38,6 @@ import br.com.petserv.interfaces.Mercadoria;
 import br.com.petserv.util.JNumberFormatField;
 
 import com.toedter.calendar.JDateChooser;
-import java.awt.Color;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.border.LineBorder;
-import java.awt.BorderLayout;
 
 
 
