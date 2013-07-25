@@ -1,6 +1,7 @@
 package br.com.petserv.entidades;
 
 
+
 public class Endereco {
 	
 	private Long id_endereco;
@@ -15,7 +16,7 @@ public class Endereco {
 	}
 	
 	
-	public Endereco(Long id_endereco, String endereco, String complemento,
+	public Endereco(String endereco, String complemento,
 			String bairro, String cidade, String cep) {
 		setId_endereco(id_endereco);
 		setDescricao(endereco);
@@ -27,8 +28,8 @@ public class Endereco {
 	public Long getId_endereco() {
 		return id_endereco;
 	}
-	public void setId_endereco(Long id_endereco) {
-		this.id_endereco = id_endereco;
+	public Long setId_endereco(Long id_endereco) {
+		return this.id_endereco = id_endereco;
 	}
 	public String getDescricao() {
 		return descricao;

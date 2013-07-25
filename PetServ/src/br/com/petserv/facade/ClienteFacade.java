@@ -11,9 +11,11 @@ import br.com.petserv.entidades.Endereco;
 public class ClienteFacade {
 	ClienteDao dao = new ClienteDao();
 	EnderecoDao enderecoDao = new EnderecoDao();
-	
-	public boolean salvaCliente(Cliente cliente) throws SQLException {		
-		return dao.inserirCliente(cliente);
+
+	public boolean salvaCliente(Cliente cliente, Endereco endereco)
+			throws SQLException {
+		return enderecoDao.inserirEndereco(endereco)
+				&& dao.inserirCliente(cliente);
 
 	}
 
@@ -24,25 +26,26 @@ public class ClienteFacade {
 	}
 
 	public boolean atualizarCliente(Cliente cliente) {
-		
-		return dao.atualizarCliente(cliente) && enderecoDao.atualizarEndereco(cliente.getEndereco());
+
+		return dao.atualizarCliente(cliente)
+				&& enderecoDao.atualizarEndereco(cliente.getFkEndereco());
 	}
 
 	public List<Cliente> getLista(Cliente cliente) {
-		
+
 		return dao.getListaClientes();
 	}
-	
-	public List<Endereco> getListEnderecos(Cliente cliente){
+
+	public List<Endereco> getListEnderecos(Cliente cliente) {
 		return enderecoDao.getListaEnderecos();
 	}
 
 	public Cliente getCliente(Long id) {
-		
 		return dao.getCliente(id);
 	}
-	public Endereco getEndereco(Long id) {		
-		return (Endereco) enderecoDao.getEndereco(id);
+
+	public Endereco getEndereco(Cliente cliente) {
+		return enderecoDao.getEndereco(cliente.getFkEndereco());
 	}
 
 }
