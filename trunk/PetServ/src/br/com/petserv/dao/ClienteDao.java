@@ -24,20 +24,11 @@ public class ClienteDao {
 		return conn;
 	}
 
-	public boolean inserirCliente(Cliente cliente) {
-
-		boolean operacao = false;
+	public boolean inserirCliente(Cliente cliente) throws SQLException {
+		boolean operacao = false;	
+		connection = getConnection();
 
 		try {
-			connection = getConnection();
-			
-			EnderecoDao dao = new EnderecoDao();
-			dao.inserirEndereco(cliente.getEndereco());
-			
-			Long id = (Long) dao.getEndereco(cliente.getEndereco().getId_endereco());
-			
-			
-			 
 
 			String query = ("INSERT INTO cliente (str_nome, str_email, str_telefone, dt_cadastro, str_cpf, fk_endereco) VALUES (?,?,?,?,?,?)");
 			ptmt = connection.prepareStatement(query);
@@ -45,11 +36,23 @@ public class ClienteDao {
 			ptmt.setString(1, cliente.getNome());
 			ptmt.setString(2, cliente.getEmail());
 			ptmt.setString(3, cliente.getTelefone());
-			ptmt.setDate(4, new Date(cliente.getData_cadastro().getTimeInMillis()));
-			ptmt.setLong(5, id);
+			ptmt.setDate(4, new Date(cliente.getData_cadastro()
+					.getTimeInMillis()));
+			ptmt.setString(5, cliente.getCpf());
+
+//		__________________________________________________________________________		
 			
-//			Meu problema está aqui
-			ptmt.setLong(6, id);
+			// Um dos meus problemas está aqui
+//			Não sei como atribuir a fk_endereco do cliente criado! 
+			
+			ptmt.setLong(6, ?????????????);
+
+//			_________________________________________________________________
+			
+			
+			
+			
+			
 			int a = ptmt.executeUpdate();
 			if (a != 0) {
 				operacao = true;
@@ -72,7 +75,7 @@ public class ClienteDao {
 				e.printStackTrace();
 				System.out.println("erro ao inserir o Cliente");
 			}
-			
+
 		}
 		return operacao;
 
