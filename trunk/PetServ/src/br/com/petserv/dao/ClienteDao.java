@@ -45,7 +45,7 @@ public class ClienteDao {
 			// Um dos meus problemas está aqui
 //			Não sei como atribuir a fk_endereco do cliente criado! 
 			
-			ptmt.setLong(6, ?????????????);
+			ptmt.setLong(6, cliente.getFkEndereco());
 
 //			_________________________________________________________________
 			

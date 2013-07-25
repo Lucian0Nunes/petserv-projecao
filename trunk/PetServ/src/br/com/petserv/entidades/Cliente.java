@@ -2,6 +2,8 @@ package br.com.petserv.entidades;
 
 import java.util.Calendar;
 
+import br.com.petserv.dao.EnderecoDao;
+
 public class Cliente {
 
 	private Long idCliente;
@@ -10,14 +12,14 @@ public class Cliente {
 	private String telefone;
 	private String email;
 	private Calendar data_cadastro;
-	private Endereco endereco;
+	private Long fkEndereco;
 
 	public Cliente() {
 
 	}
 
 	public Cliente(Long idCliente, String nome, String cpf, String telefone,
-			String email, Calendar data_cadastro, Endereco endereco) {
+			String email, Calendar data_cadastro, Endereco Endereco) {
 
 		setIdCliente(idCliente);
 		setNome(nome);
@@ -25,7 +27,7 @@ public class Cliente {
 		setTelefone(telefone);
 		setEmail(email);
 		setData_cadastro(data_cadastro);
-		setEndereco(endereco);
+		setFkEndereco(Endereco);
 	}
 
 	
@@ -78,12 +80,14 @@ public class Cliente {
 		this.data_cadastro = data_cadastro;
 	}
 
-	public Endereco getEndereco() {
-		return endereco;
+	public Long getFkEndereco() {
+		return fkEndereco;
 	}
 
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
+	public void setFkEndereco(Endereco endereco) {	
+		EnderecoDao dao  = new EnderecoDao();
+		this.fkEndereco = dao.getIdEndereco();
+		
 	}
 
 }

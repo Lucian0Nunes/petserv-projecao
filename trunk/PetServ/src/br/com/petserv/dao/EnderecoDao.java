@@ -188,6 +188,7 @@ public class EnderecoDao {
 				endereco.setBairro(rs.getString("str_bairro"));
 				endereco.setCidade(rs.getString("str_cidade"));
 				endereco.setCep(rs.getString("str_cep"));
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -204,6 +205,38 @@ public class EnderecoDao {
 			}
 		}
 		return endereco;
+	}
+
+	public Long getIdEndereco() {
+		Endereco endereco = new Endereco();
+		long resultado = 0;
+
+		try {
+			String queryString = "SELECT * FROM endereco";
+			connection = getConnection();
+			ptmt = connection.prepareStatement(queryString);
+
+			rs = ptmt.executeQuery();
+			while (rs.next()) {
+
+				resultado = endereco.setId_endereco(rs.getLong("id_endereco"));
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ptmt != null)
+					ptmt.close();
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return resultado + 1;
 	}
 
 }

@@ -418,13 +418,17 @@ public class Clientes extends JPanel {
 
 		Calendar cal_cadastro = Calendar.getInstance();
 		cal_cadastro.setTime(jCalendar.getDate());
-
-		Endereco endereco = new Endereco(idCliente, jtfEndereco.getText(),
+		
+		
+		Endereco endereco = new Endereco(jtfEndereco.getText(),
 				jtfComplemento.getText(), jtfBairro.getText(),
-				jtfCidade.getText(), jtfCep.getText());
+				jtfCidade.getText(), jtfCep.getText());		
+		
+
 		Cliente cliente = new Cliente(idCliente, jtfNome.getText(),
 				jtfCpf.getText(), jtfTelefone.getText(), jtfEmail.getText(),
 				cal_cadastro, endereco);
+		
 
 		boolean operacao_cliente = false;
 
@@ -432,7 +436,7 @@ public class Clientes extends JPanel {
 			operacao_cliente = dao.atualizarCliente(cliente);
 
 		} else {
-			operacao_cliente = dao.salvaCliente(cliente);
+			operacao_cliente = dao.salvaCliente(cliente,endereco);
 		}
 
 		if (operacao_cliente) {
