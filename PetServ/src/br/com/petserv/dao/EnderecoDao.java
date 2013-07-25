@@ -144,7 +144,7 @@ public class EnderecoDao {
 
 				endereco.setId_endereco(rs.getLong("id_endereco"));
 				endereco.setDescricao(rs.getString("str_endereco"));
-				endereco.setComplemento(rs.getString("str_complento"));
+				endereco.setComplemento(rs.getString("str_complemento"));
 				endereco.setBairro(rs.getString("str_bairro"));
 				endereco.setCidade(rs.getString("str_cidade"));
 				endereco.setCep(rs.getString("str_cep"));
@@ -170,12 +170,9 @@ public class EnderecoDao {
 		return lista;
 	}
 
-	public Object getEndereco(Long id) {
+	public Endereco getEndereco(Long id) {
 		Endereco endereco = new Endereco();
-		
-		if(id == null){
-			id = (long) 1;
-		}
+
 		try {
 			String queryString = "SELECT * FROM endereco WHERE id_endereco = ?";
 			connection = getConnection();
@@ -208,7 +205,5 @@ public class EnderecoDao {
 		}
 		return endereco;
 	}
-
-	
 
 }
