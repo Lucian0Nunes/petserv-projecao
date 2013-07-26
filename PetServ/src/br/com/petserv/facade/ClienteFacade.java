@@ -20,15 +20,14 @@ public class ClienteFacade {
 	}
 
 	public void removeCliente(Long id) {
-		enderecoDao.removerEndereco(id);
 		dao.removerCliente(id);
+		
 
 	}
 
-	public boolean atualizarCliente(Cliente cliente) {
-
-		return dao.atualizarCliente(cliente)
-				&& enderecoDao.atualizarEndereco(cliente.getFkEndereco());
+	public boolean atualizarCliente(Cliente cliente, Endereco endereco) {
+		return enderecoDao.atualizarEndereco(endereco)
+		&&  dao.atualizarCliente(cliente);
 	}
 
 	public List<Cliente> getLista(Cliente cliente) {
