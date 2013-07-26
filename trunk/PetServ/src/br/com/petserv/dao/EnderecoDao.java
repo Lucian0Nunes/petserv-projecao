@@ -96,11 +96,9 @@ public class EnderecoDao {
 		return operacao;
 	}
 
-	public boolean atualizarEndereco(Object obj) {
+	public boolean atualizarEndereco(Endereco endereco) {
 		boolean operacao = false;
-		try {
-
-			Endereco endereco = (Endereco) obj;
+		try {		
 
 			String queryString = "UPDATE endereco SET str_endereco = ?, str_complemento = ?, str_bairro = ?, str_cidade = ?, str_cep = ? WHERE id_endereco = ?";
 			connection = getConnection();
@@ -110,7 +108,9 @@ public class EnderecoDao {
 			ptmt.setString(3, endereco.getBairro());
 			ptmt.setString(4, endereco.getCidade());
 			ptmt.setString(5, endereco.getCep());
-			ptmt.setLong(6, endereco.getId_endereco());
+			ptmt.setLong(6, endereco.getId_endereco());		
+			
+			
 			int a = ptmt.executeUpdate();
 			if (a != 0) {
 				operacao = true;
@@ -207,8 +207,7 @@ public class EnderecoDao {
 		return endereco;
 	}
 
-	public Long getIdEndereco() {
-		Endereco endereco = new Endereco();
+	public Long getIdEndereco(Endereco endereco) {
 		long resultado = 0;
 
 		try {

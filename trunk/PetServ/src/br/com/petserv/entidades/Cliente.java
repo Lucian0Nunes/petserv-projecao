@@ -86,7 +86,7 @@ public class Cliente {
 
 	public void setFkEndereco(Endereco endereco) {	
 		EnderecoDao dao  = new EnderecoDao();
-		this.fkEndereco = dao.getIdEndereco();
+		this.fkEndereco = dao.getIdEndereco(endereco);
 		
 	}
 

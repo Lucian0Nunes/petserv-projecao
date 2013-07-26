@@ -85,7 +85,7 @@ public class ClienteDao {
 
 		boolean operacao = false;
 		try {
-			String queryString = "DELETE FROM cliente WHERE idcliente = ?;";
+			String queryString = "DELETE FROM cliente WHERE id_cliente = ?;";
 			connection = getConnection();
 			ptmt = connection.prepareStatement(queryString);
 			ptmt.setLong(1, id);
@@ -94,7 +94,7 @@ public class ClienteDao {
 				operacao = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("erro ao remover cliente na base de dados");
+			System.out.println("erro ao remover cliente na base de dados(sql)"+e);
 			operacao = false;
 		} finally {
 			try {
@@ -116,7 +116,7 @@ public class ClienteDao {
 	public boolean atualizarCliente(Cliente cliente) {
 		boolean operacao = false;
 		try {
-			String queryString = "UPDATE cliente SET nome = ?, cpf = ?, telefone = ?, email = ?, data_cadastro = ? WHERE idcliente = ?";
+			String queryString = "UPDATE cliente SET str_nome = ?, str_cpf = ?, str_telefone = ?, str_email = ?, dt_cadastro = ? WHERE id_cliente = ?";
 			connection = getConnection();
 			ptmt = connection.prepareStatement(queryString);
 			ptmt.setString(1, cliente.getNome());

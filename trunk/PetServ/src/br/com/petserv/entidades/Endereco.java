@@ -28,8 +28,8 @@ public class Endereco {
 	public Long getId_endereco() {
 		return id_endereco;
 	}
-	public Long setId_endereco(Long id_endereco) {
-		return this.id_endereco = id_endereco;
+	public Long setId_endereco(Long id_endereco) {		
+		return this.id_endereco = id_endereco;		
 	}
 	public String getDescricao() {
 		return descricao;
