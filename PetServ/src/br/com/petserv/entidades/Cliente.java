@@ -12,7 +12,7 @@ public class Cliente {
 	private String telefone;
 	private String email;
 	private Calendar data_cadastro;
-	private Long fkEndereco;
+	private Endereco endereco;
 
 	public Cliente() {
 
@@ -27,7 +27,7 @@ public class Cliente {
 		setTelefone(telefone);
 		setEmail(email);
 		setData_cadastro(data_cadastro);
-		setFkEndereco(Endereco);
+		setEndereco(Endereco);
 	}
 
 	
@@ -80,14 +80,12 @@ public class Cliente {
 		this.data_cadastro = data_cadastro;
 	}
 
-	public Long getFkEndereco() {
-		return fkEndereco;
+	public Endereco getEndereco() {
+		return endereco;
 	}
 
-	public void setFkEndereco(Endereco endereco) {	
-		EnderecoDao dao  = new EnderecoDao();
-		this.fkEndereco = dao.getIdEndereco(endereco);
-		
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 
 }

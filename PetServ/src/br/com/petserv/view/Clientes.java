@@ -48,8 +48,7 @@ public class Clientes extends JPanel {
 	private JLabel jlbEmail;
 	private JLabel jblComplemento;
 	private JTextField jtfCep;
-	private String[] titulosClientes = { "", "Nome", "Cpf", "Telefone",
-			"Email", "Data de Cadastro" };
+	private String[] titulosClientes = { "", "Nome", "Cpf", "Telefone",	"Email", "Data de Cadastro" };
 	private ClienteFacade dao;
 	private JPanel jpTabela;
 	private JPanel jpComponentes;
@@ -70,7 +69,7 @@ public class Clientes extends JPanel {
 		dao = new ClienteFacade();
 		initComponents();
 		jtbTabela_Cliente();
-		atualizaTabela(new Cliente());
+		atualizaTabela();
 
 	}
 
@@ -120,8 +119,7 @@ public class Clientes extends JPanel {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				jtfTelefone.setText(jtfTelefone.getText().replaceAll("[^0-9]",
-						""));
+				jtfTelefone.setText(jtfTelefone.getText().replaceAll("[^0-9]",""));
 			}
 
 			@Override
@@ -296,8 +294,7 @@ public class Clientes extends JPanel {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
-					ListSelectionModel model = tabelaCliente
-							.getSelectionModel();
+					ListSelectionModel model = tabelaCliente.getSelectionModel();
 					int index = model.getLeadSelectionIndex();
 					carregandoCampos(carregarCliente(index));
 
@@ -314,41 +311,37 @@ public class Clientes extends JPanel {
 		add(jpTabela);
 	}
 
-	protected Object[] carregarCliente(int index) {
-		Object[] arr = new Object[10];
+	protected Long carregarCliente(int index) {
+		Long id = -1l;
 		if (index != -1) {
 			btnSalvar.setText("ALTERAR");
 			btnRemover.setEnabled(true);
 
-			arr[0] = (Long) tabelaCliente.getValueAt(index, 0);
-			arr[1] = (String) tabelaCliente.getValueAt(index, 1);
-			arr[2] = (String) tabelaCliente.getValueAt(index, 2);
-			arr[3] = (String) tabelaCliente.getValueAt(index, 3);
-			arr[4] = (String) tabelaCliente.getValueAt(index, 4);
-			arr[5] = (String) tabelaCliente.getValueAt(index, 5);
+			id = (Long) tabelaCliente.getValueAt(index, 0);
 			
-
-
-
 		}else{
 			btnSalvar.setText("Adicionar");
 			btnRemover.setEnabled(false);
 		}
-		return arr;
+		return id;
 	}
 
-	private void carregandoCampos(Object[] cliente) {
-		idCliente = (Long) cliente[0];
-		jtfNome.setText((String) cliente[1]);
-		jtfCpf.setText((String) cliente[2]);
-		jtfTelefone.setText((String) cliente[3]);
-		jtfEmail.setText((String) cliente[4]);
-		jCalendar.setDateFormatString((String) cliente[5]);
-//		jtfCep.setText((String) cliente[6]);
-//		jtfEndereco.setText((String) cliente[7]);
-//		jtfComplemento.setText((String) cliente[8]);
-//		jtfBairro.setText((String) cliente[4]);
-//		jtfCidade.setText((String) cliente[9]);
+	private void carregandoCampos(Long idCliente) {
+
+		//aqui
+		Cliente cli = dao.getCliente(idCliente);
+		
+		idCliente = (Long) cli.getIdCliente();
+		jtfNome.setText(cli.getNome());
+		jtfCpf.setText(cli.getCpf());
+		jtfTelefone.setText(cli.getTelefone());
+		jtfEmail.setText(cli.getEmail());
+		jCalendar.setDateFormatString(cli.getData_cadastro().toString());
+		jtfCep.setText(cli.getEndereco().getCep());
+		jtfEndereco.setText(cli.getEndereco().getDescricao());
+		jtfComplemento.setText(cli.getEndereco().getComplemento());
+		jtfBairro.setText(cli.getEndereco().getBairro());
+		jtfCidade.setText(cli.getEndereco().getCidade());
 
 	}
 
@@ -379,20 +372,18 @@ public class Clientes extends JPanel {
 				
 				for (Cliente cliente : clientes) {
 					
-//					EnderecoDao enderecoDao = new EnderecoDao();
-//					Endereco endereco = enderecoDao.getEndereco(cli.getFkEndereco());
-
-					model.addRow(new Object[] { cliente.getIdCliente(),
+					model.addRow(new Object[] { 
+							cliente.getIdCliente(),
 							cliente.getNome(),
 							cliente.getCpf(),
 							cliente.getTelefone(),
 							cliente.getEmail(),
-							sdf.format(cliente.getData_cadastro().getTime()), });
-//							endereco.getCep(),
-//							endereco.getDescricao(),							
-//							endereco.getComplemento(), 
-//							endereco.getBairro(),
-//							endereco.getCidade(),
+							sdf.format(cliente.getData_cadastro().getTime()),
+							cliente.getEndereco().getCep(),
+							cliente.getEndereco().getDescricao(),							
+							cliente.getEndereco().getComplemento(), 
+							cliente.getEndereco().getBairro(),
+							cliente.getEndereco().getCidade() });
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -442,15 +433,21 @@ public class Clientes extends JPanel {
 		Calendar cal_cadastro = Calendar.getInstance();
 		cal_cadastro.setTime(jCalendar.getDate());
 
-		Endereco endereco = new Endereco(jtfEndereco.getText(),
-				jtfComplemento.getText(), jtfBairro.getText(),
-				jtfCidade.getText(), jtfCep.getText());
+		Endereco endereco = new Endereco(
+				jtfEndereco.getText(),
+				jtfComplemento.getText(),
+				jtfBairro.getText(),
+				jtfCidade.getText(),
+				jtfCep.getText());
 
-		Cliente cliente = new Cliente(idCliente, jtfNome.getText(),
-				jtfCpf.getText(), jtfTelefone.getText(), jtfEmail.getText(),
-				cal_cadastro, endereco);
-		
-			
+		Cliente cliente = new Cliente(
+				idCliente,
+				jtfNome.getText(),
+				jtfCpf.getText(),
+				jtfTelefone.getText(),
+				jtfEmail.getText(),
+				cal_cadastro,
+				endereco);
 
 		boolean operacao_cliente = false;
 
@@ -458,38 +455,28 @@ public class Clientes extends JPanel {
 			operacao_cliente = dao.atualizarCliente(cliente, endereco);			
 
 		} else {
-			operacao_cliente = dao.salvaCliente(cliente, endereco);
+			operacao_cliente = dao.salvaCliente(cliente);
 		}
 
 		if (operacao_cliente) {
 			limpaCampos();
-			atualizaTabela(cliente);
+			atualizaTabela();
 		} else {
 			JOptionPane.showMessageDialog(null,
 					"Erro na operação, verifique os dados digitados");
 		}
 	}
 
-	public List<Cliente> retornoCliente(Cliente cliente) {
-		return dao.getLista(cliente);
 
-	}
-
-	public List<Endereco> retornoEndereco(Cliente cliente) {
-		return dao.getListEnderecos(cliente);
-
-	}
-
-	public void atualizaTabela(Cliente cliente) {
-		jtable_Cliente(retornoCliente(cliente));
+	public void atualizaTabela() {
+		jtable_Cliente(dao.getLista());
 
 	}
 
 	protected void removerCliente(Long id) {
-		Cliente cliente = new Cliente();
 		dao.removeCliente(id);
 		limpaCampos();
-		atualizaTabela(cliente);
+		atualizaTabela();
 		btnRemover.setEnabled(false);
 	}
 }
