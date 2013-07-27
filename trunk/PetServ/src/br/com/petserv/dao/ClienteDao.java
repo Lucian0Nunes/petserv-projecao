@@ -24,20 +24,18 @@ public class ClienteDao {
 		return conn;
 	}
 
-	public boolean inserirCliente(Cliente cliente) throws SQLException {
+	public boolean inserirCliente(Cliente cliente){
 		boolean operacao = false;	
-		connection = getConnection();
 
 		try {
-
+			connection = getConnection();
 			String query = ("INSERT INTO cliente (str_nome, str_email, str_telefone, dt_cadastro, str_cpf, fk_endereco) VALUES (?,?,?,?,?,?)");
 			ptmt = connection.prepareStatement(query);
 
 			ptmt.setString(1, cliente.getNome());
 			ptmt.setString(2, cliente.getEmail());
 			ptmt.setString(3, cliente.getTelefone());
-			ptmt.setDate(4, new Date(cliente.getData_cadastro()
-					.getTimeInMillis()));
+			ptmt.setDate(4, new Date(cliente.getData_cadastro().getTimeInMillis()));
 			ptmt.setString(5, cliente.getCpf());
 
 //		__________________________________________________________________________		
@@ -45,12 +43,9 @@ public class ClienteDao {
 			// Um dos meus problemas está aqui
 //			Não sei como atribuir a fk_endereco do cliente criado! 
 			
-			ptmt.setLong(6, cliente.getFkEndereco());
+			ptmt.setLong(6, cliente.getEndereco().getId_endereco());
 
 //			_________________________________________________________________
-			
-			
-			
 			
 			
 			int a = ptmt.executeUpdate();
@@ -154,6 +149,7 @@ public class ClienteDao {
 			connection = getConnection();
 			ptmt = connection.prepareStatement(queryString);
 			rs = ptmt.executeQuery();
+			EnderecoDao edao = new EnderecoDao();
 			while (rs.next()) {
 				Cliente cliente = new Cliente();
 				Calendar cal = new GregorianCalendar();
@@ -163,6 +159,7 @@ public class ClienteDao {
 				cliente.setTelefone(rs.getString("str_telefone"));
 				cliente.setEmail(rs.getString("str_email"));
 				cal.setTime((rs.getDate("dt_cadastro")));
+				cliente.setEndereco(edao.getEndereco(rs.getLong("fk_endereco")));
 				cliente.setData_cadastro(cal);
 				lista.add(cliente);
 			}
@@ -192,16 +189,17 @@ public class ClienteDao {
 			connection = getConnection();
 			ptmt = connection.prepareStatement(queryString);
 			ptmt.setLong(1, id);
-
+			EnderecoDao edao = new EnderecoDao();
 			rs = ptmt.executeQuery();
 			while (rs.next()) {
 				Calendar cal = new GregorianCalendar();
 				cliente.setIdCliente(rs.getLong("id_cliente"));
-				cliente.setNome(rs.getString("nome"));
-				cliente.setCpf(rs.getString("cpf"));
-				cliente.setTelefone(rs.getString("telefone"));
-				cliente.setEmail(rs.getString("email"));
+				cliente.setNome(rs.getString("str_nome"));
+				cliente.setCpf(rs.getString("str_cpf"));
+				cliente.setTelefone(rs.getString("str_telefone"));
+				cliente.setEmail(rs.getString("str_email"));
 				cal.setTime((rs.getDate("dt_cadastro")));
+				cliente.setEndereco(edao.getEndereco(rs.getLong("fk_endereco")));
 				cliente.setData_cadastro(cal);
 			}
 		} catch (SQLException e) {

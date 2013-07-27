@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Statement;
+
 import br.com.petserv.entidades.Endereco;
 import br.com.petserv.util.FabricaConexao;
 
@@ -21,15 +23,16 @@ public class EnderecoDao {
 		return conn;
 	}
 
-	public boolean inserirEndereco(Object obj) {
+	public Long inserirEndereco(Object obj) {
 
-		boolean operacao = false;
+		Long id = -1l;
 
 		try {
 			Endereco endereco = (Endereco) obj;
 			connection = getConnection();
+			ResultSet rs = null;
 			String query = ("INSERT INTO endereco (str_endereco, str_complemento, str_bairro, str_cidade, str_cep) VALUES (?,?,?,?,?)");
-			ptmt = connection.prepareStatement(query);
+			ptmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 			ptmt.setString(1, endereco.getDescricao());
 			ptmt.setString(3, endereco.getComplemento());
@@ -37,31 +40,18 @@ public class EnderecoDao {
 			ptmt.setString(4, endereco.getCidade());
 			ptmt.setString(5, endereco.getCep());
 
-			int a = ptmt.executeUpdate();
-			if (a != 0) {
-				operacao = true;
+			ptmt.executeUpdate();
+			rs = ptmt.getGeneratedKeys();
+			if (rs != null && rs.next()) {
+				id = rs.getLong(1);
+
 			}
 
 		} catch (SQLException e) {
 			System.out.println("erro ao inserir o endereço 1");
 			e.printStackTrace();
-			operacao = false;
-		} finally {
-			try {
-				if (ptmt != null)
-					ptmt.close();
-				if (connection != null)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("erro ao inserir o endereço 2");
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("erro ao inserir o Cliente 3");
-			}
 		}
-		return operacao;
-
+		return id;
 	}
 
 	public boolean removerEndereco(Long id) {
@@ -98,7 +88,7 @@ public class EnderecoDao {
 
 	public boolean atualizarEndereco(Endereco endereco) {
 		boolean operacao = false;
-		try {		
+		try {
 
 			String queryString = "UPDATE endereco SET str_endereco = ?, str_complemento = ?, str_bairro = ?, str_cidade = ?, str_cep = ? WHERE id_endereco = ?";
 			connection = getConnection();
@@ -108,9 +98,8 @@ public class EnderecoDao {
 			ptmt.setString(3, endereco.getBairro());
 			ptmt.setString(4, endereco.getCidade());
 			ptmt.setString(5, endereco.getCep());
-			ptmt.setLong(6, endereco.getId_endereco());		
-			
-			
+			ptmt.setLong(6, endereco.getId_endereco());
+
 			int a = ptmt.executeUpdate();
 			if (a != 0) {
 				operacao = true;
