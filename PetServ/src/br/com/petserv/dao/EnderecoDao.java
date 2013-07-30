@@ -32,7 +32,8 @@ public class EnderecoDao {
 			connection = getConnection();
 			ResultSet rs = null;
 			String query = ("INSERT INTO endereco (str_endereco, str_complemento, str_bairro, str_cidade, str_cep) VALUES (?,?,?,?,?)");
-			ptmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			ptmt = connection.prepareStatement(query,
+					Statement.RETURN_GENERATED_KEYS);
 
 			ptmt.setString(1, endereco.getDescricao());
 			ptmt.setString(3, endereco.getComplemento());
@@ -48,7 +49,7 @@ public class EnderecoDao {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("erro ao inserir o endereço 1");
+			System.out.println("erro ao inserir o endereço 1" + e);
 			e.printStackTrace();
 		}
 		return id;
@@ -67,7 +68,7 @@ public class EnderecoDao {
 				operacao = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("erro ao remover cliente(endereço)");
+			System.out.println("erro ao remover cliente(endereço)" + e);
 			operacao = false;
 		} finally {
 			try {
@@ -86,8 +87,9 @@ public class EnderecoDao {
 		return operacao;
 	}
 
-	public boolean atualizarEndereco(Endereco endereco) {
+	public boolean atualizarEndereco(Long id) {
 		boolean operacao = false;
+		Endereco endereco = new Endereco();
 		try {
 
 			String queryString = "UPDATE endereco SET str_endereco = ?, str_complemento = ?, str_bairro = ?, str_cidade = ?, str_cep = ? WHERE id_endereco = ?";
@@ -98,7 +100,7 @@ public class EnderecoDao {
 			ptmt.setString(3, endereco.getBairro());
 			ptmt.setString(4, endereco.getCidade());
 			ptmt.setString(5, endereco.getCep());
-			ptmt.setLong(6, endereco.getId_endereco());
+			ptmt.setLong(6, id);
 
 			int a = ptmt.executeUpdate();
 			if (a != 0) {
@@ -194,37 +196,6 @@ public class EnderecoDao {
 			}
 		}
 		return endereco;
-	}
-
-	public Long getIdEndereco(Endereco endereco) {
-		long resultado = 0;
-
-		try {
-			String queryString = "SELECT * FROM endereco";
-			connection = getConnection();
-			ptmt = connection.prepareStatement(queryString);
-
-			rs = ptmt.executeQuery();
-			while (rs.next()) {
-
-				resultado = endereco.setId_endereco(rs.getLong("id_endereco"));
-
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (ptmt != null)
-					ptmt.close();
-				if (connection != null)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return resultado + 1;
 	}
 
 }

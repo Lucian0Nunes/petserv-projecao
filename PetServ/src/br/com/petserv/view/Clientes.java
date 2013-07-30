@@ -48,7 +48,8 @@ public class Clientes extends JPanel {
 	private JLabel jlbEmail;
 	private JLabel jblComplemento;
 	private JTextField jtfCep;
-	private String[] titulosClientes = { "", "Nome", "Cpf", "Telefone",	"Email", "Data de Cadastro" };
+	private String[] titulosClientes = { "", "Nome", "Cpf", "Telefone",
+			"Email", "Data de Cadastro" };
 	private ClienteFacade dao;
 	private JPanel jpTabela;
 	private JPanel jpComponentes;
@@ -57,12 +58,14 @@ public class Clientes extends JPanel {
 	private JButton btnRemover;
 	private JButton btnSalvar;
 	private Long idCliente;
+	private Long Cliente_ser_removido_ou_alterado;
 	private JTextField jtfNome;
 	private JTextField jtfEmail;
 	private JTextField jtfCidade;
 	private JTextField jtfBairro;
 	private JTextField jtfEndereco;
 	private JTextField jtfComplemento;
+
 
 	public Clientes() {
 		setBackground(Color.LIGHT_GRAY);
@@ -119,7 +122,8 @@ public class Clientes extends JPanel {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				jtfTelefone.setText(jtfTelefone.getText().replaceAll("[^0-9]",""));
+				jtfTelefone.setText(jtfTelefone.getText().replaceAll("[^0-9]",
+						""));
 			}
 
 			@Override
@@ -167,7 +171,7 @@ public class Clientes extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				removerCliente(idCliente);
+				removerCliente(Cliente_ser_removido_ou_alterado);
 
 			}
 		});
@@ -294,9 +298,10 @@ public class Clientes extends JPanel {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
-					ListSelectionModel model = tabelaCliente.getSelectionModel();
+					ListSelectionModel model = tabelaCliente
+							.getSelectionModel();
 					int index = model.getLeadSelectionIndex();
-					carregandoCampos(carregarCliente(index));
+					carregandoCampos(carregarCliente(index));					
 
 				}
 			}
@@ -319,7 +324,10 @@ public class Clientes extends JPanel {
 
 			id = (Long) tabelaCliente.getValueAt(index, 0);
 			
-		}else{
+			
+			Cliente_ser_removido_ou_alterado = (long) id;
+
+		} else {
 			btnSalvar.setText("Adicionar");
 			btnRemover.setEnabled(false);
 		}
@@ -327,11 +335,15 @@ public class Clientes extends JPanel {
 	}
 
 	private void carregandoCampos(Long idCliente) {
-
-		//aqui
+		// aqui
+		
 		Cliente cli = dao.getCliente(idCliente);
 		
-		idCliente = (Long) cli.getIdCliente();
+		
+		Calendar cal_cadastro = Calendar.getInstance();
+		cal_cadastro.setTime(jCalendar.getDate());
+
+		idCliente = cli.getIdCliente();
 		jtfNome.setText(cli.getNome());
 		jtfCpf.setText(cli.getCpf());
 		jtfTelefone.setText(cli.getTelefone());
@@ -352,7 +364,7 @@ public class Clientes extends JPanel {
 
 		DefaultTableCellRenderer direita = new DefaultTableCellRenderer();
 		direita.setHorizontalAlignment(JLabel.RIGHT);
-		
+
 		tabelaCliente.getColumnModel().getColumn(0).setPreferredWidth(0);
 		tabelaCliente.getColumnModel().getColumn(0).setMinWidth(0);
 		tabelaCliente.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -369,19 +381,16 @@ public class Clientes extends JPanel {
 		if (clientes != null) {
 			//
 			try {
-				
+
 				for (Cliente cliente : clientes) {
-					
-					model.addRow(new Object[] { 
-							cliente.getIdCliente(),
-							cliente.getNome(),
-							cliente.getCpf(),
-							cliente.getTelefone(),
-							cliente.getEmail(),
+
+					model.addRow(new Object[] { cliente.getIdCliente(),
+							cliente.getNome(), cliente.getCpf(),
+							cliente.getTelefone(), cliente.getEmail(),
 							sdf.format(cliente.getData_cadastro().getTime()),
 							cliente.getEndereco().getCep(),
-							cliente.getEndereco().getDescricao(),							
-							cliente.getEndereco().getComplemento(), 
+							cliente.getEndereco().getDescricao(),
+							cliente.getEndereco().getComplemento(),
 							cliente.getEndereco().getBairro(),
 							cliente.getEndereco().getCidade() });
 				}
@@ -433,27 +442,18 @@ public class Clientes extends JPanel {
 		Calendar cal_cadastro = Calendar.getInstance();
 		cal_cadastro.setTime(jCalendar.getDate());
 
-		Endereco endereco = new Endereco(
-				jtfEndereco.getText(),
-				jtfComplemento.getText(),
-				jtfBairro.getText(),
-				jtfCidade.getText(),
-				jtfCep.getText());
+		Endereco endereco = new Endereco(jtfEndereco.getText(),
+				jtfComplemento.getText(), jtfBairro.getText(),
+				jtfCidade.getText(), jtfCep.getText());
 
-		Cliente cliente = new Cliente(
-				idCliente,
-				jtfNome.getText(),
-				jtfCpf.getText(),
-				jtfTelefone.getText(),
-				jtfEmail.getText(),
-				cal_cadastro,
-				endereco);
+		Cliente cliente = new Cliente(idCliente, jtfNome.getText(),
+				jtfCpf.getText(), jtfTelefone.getText(), jtfEmail.getText(),
+				cal_cadastro, endereco);
 
 		boolean operacao_cliente = false;
 
 		if (btnSalvar.getText().equals("ALTERAR")) {
-			operacao_cliente = dao.atualizarCliente(cliente, endereco);			
-
+			operacao_cliente = dao.atualizarCliente(Cliente_ser_removido_ou_alterado);
 		} else {
 			operacao_cliente = dao.salvaCliente(cliente);
 		}
@@ -467,9 +467,11 @@ public class Clientes extends JPanel {
 		}
 	}
 
-
 	public void atualizaTabela() {
-		jtable_Cliente(dao.getLista());
+		jtable_Cliente(dao.getListaClientes());		
+//		Aqui
+		dao.getListEnderecos();
+		
 
 	}
 
