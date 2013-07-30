@@ -108,8 +108,10 @@ public class ClienteDao {
 		return operacao;
 	}
 
-	public boolean atualizarCliente(Cliente cliente) {
+	public boolean atualizarCliente(Long id) {
 		boolean operacao = false;
+		Cliente cliente = new Cliente();	
+		
 		try {
 			String queryString = "UPDATE cliente SET str_nome = ?, str_cpf = ?, str_telefone = ?, str_email = ?, dt_cadastro = ? WHERE id_cliente = ?";
 			connection = getConnection();
@@ -118,9 +120,8 @@ public class ClienteDao {
 			ptmt.setString(2, cliente.getCpf());
 			ptmt.setString(3, cliente.getTelefone());
 			ptmt.setString(4, cliente.getEmail());
-			ptmt.setDate(5, new Date(cliente.getData_cadastro()
-					.getTimeInMillis()));
-			ptmt.setLong(6, cliente.getIdCliente());
+			ptmt.setDate(5, new Date(cliente.getData_cadastro().getTimeInMillis()));
+			ptmt.setLong(6, id);
 			int a = ptmt.executeUpdate();
 			if (a != 0) {
 				operacao = true;
@@ -218,5 +219,6 @@ public class ClienteDao {
 		}
 		return cliente;
 	}
+	
 
 }

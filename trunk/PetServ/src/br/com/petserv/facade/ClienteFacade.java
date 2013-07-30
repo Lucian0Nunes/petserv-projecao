@@ -21,22 +21,26 @@ public class ClienteFacade {
 	}
 
 	public void removeCliente(Long id) {
+		Cliente cliente = cdao.getCliente(id);
+		long idEnd = cliente.getEndereco().getId_endereco();
 		cdao.removerCliente(id);
-		
+		edao.removerEndereco(idEnd);
 
 	}
 
-	public boolean atualizarCliente(Cliente cliente, Endereco endereco) {
-		return edao.atualizarEndereco(endereco)
-		&&  cdao.atualizarCliente(cliente);
+	public boolean atualizarCliente(Long id) {
+		Cliente cliente = cdao.getCliente(id);
+		long idEnd = cliente.getEndereco().getId_endereco();
+		return edao.atualizarEndereco(idEnd) && cdao.atualizarCliente(id);
+
 	}
 
-	public List<Cliente> getLista() {
+	public List<Cliente> getListaClientes() {
 
 		return cdao.getListaClientes();
 	}
 
-	public List<Endereco> getListEnderecos(Cliente cliente) {
+	public List<Endereco> getListEnderecos() {
 		return edao.getListaEnderecos();
 	}
 
@@ -44,8 +48,8 @@ public class ClienteFacade {
 		return cdao.getCliente(id);
 	}
 
-	public Endereco getEndereco(Cliente cliente) {
-		return edao.getEndereco(cliente.getEndereco().getId_endereco());
+	public Endereco getEndereco(Long id) {
+		return edao.getEndereco(id);
 	}
 
 }
