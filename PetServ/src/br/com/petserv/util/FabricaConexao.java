@@ -14,7 +14,7 @@ public class FabricaConexao {
 
         private FabricaConexao() {
                 try {
-                        Class.forName(driverClassName);
+                     Class.forName(driverClassName);
                 } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                 }
